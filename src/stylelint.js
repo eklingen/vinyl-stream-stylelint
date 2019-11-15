@@ -85,7 +85,7 @@ function stylelintVinylWrapper (options = {}) {
     const contents = file.contents.toString('utf8')
 
     try {
-      await stylelint({ ...options, files: null, code: contents, codeFilename: file.path })
+      result = await stylelint({ ...options, files: null, code: contents, codeFilename: file.path })
     } catch (error) {
       return callback(error)
     }
