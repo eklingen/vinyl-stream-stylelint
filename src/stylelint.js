@@ -92,11 +92,11 @@ function stylelintVinylWrapper (options = {}) {
 
     if (result.errored) {
       results = [...results, ...result.results]
-    }
-
-    if (options.fix && result.output && result.output !== contents) {
-      file.contents = Buffer.from(result.output)
-      return callback(null, file)
+    } else {
+      if (options.fix && result.output && result.output !== contents) {
+        file.contents = Buffer.from(result.output)
+        return callback(null, file)
+      }
     }
 
     return callback()
