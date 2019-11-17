@@ -57,7 +57,7 @@ function stylelintGlobWrapper (options = {}) {
 
     const output = outputFormatter(result.output)
 
-    if (options.failAfterError) {
+    if (result.errored && options.failAfterError) {
       return callback(new Error(output))
     }
 
