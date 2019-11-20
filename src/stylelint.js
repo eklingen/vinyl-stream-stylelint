@@ -5,11 +5,13 @@
 //   Pass a `files` glob string.
 //   Files in the stream are ignored. You can set your stream src to `{ read: false }`.
 //   If you set `options.fix: true` then fixes are applied to source files directly on disk.
+//   Cache is not used.
 // Slow option:
 //   Pass files through the stream (not a `files` string).
 //   Files are removed from the stream.
 //   Files with fixes (if any) are pushed back into the stream.
 //   Use this if you need more control, or need to do extra pre- or post- processing of files.
+//   Cache is used.
 
 const { join } = require('path')
 const { Transform } = require('stream')
@@ -46,6 +48,7 @@ function stylelintWrapper (options = {}) {
 
 function stylelintGlobWrapper (options = {}) {
   const stylelint = require('stylelint/lib/standalone')
+  const formatter = require('stylelint/lib/formatters/stringFormatter')
 
   function transform (file, encoding, callback) {
     return callback(null, file) // Any files in the stream are ignored
@@ -60,7 +63,7 @@ function stylelintGlobWrapper (options = {}) {
       return callback(error)
     }
 
-    const output = outputFormatter(result.output)
+    const output = outputFormatter(formatter(result.results))
 
     if (result.errored && options.failAfterError) {
       return callback(new Error(output))
