@@ -4,7 +4,7 @@
 // Fast option:
 //   Pass a `files` glob string.
 //   Files in the stream are ignored. You can set your stream src to `{ read: false }`.
-//   If you set `options.fix: true` then fixes are applied to source files directly on disk.
+//   If you set `options.stylelint.fix: true` then fixes are applied to source files directly on disk.
 //   Cache is not used.
 // Slow option:
 //   Pass files through the stream (not a `files` string).
@@ -39,7 +39,7 @@ function stylelintWrapper (options = {}) {
   options = { ...DEFAULT_OPTIONS, ...options }
   options.stylelint = { ...DEFAULT_OPTIONS.stylelint, ...options.stylelint }
 
-  if (options.files) {
+  if (options.stylelint.files) {
     return stylelintGlobWrapper(options)
   }
 
@@ -58,7 +58,7 @@ function stylelintGlobWrapper (options = {}) {
     let result
 
     try {
-      result = await stylelint({ ...options })
+      result = await stylelint({ ...options.stylelint })
     } catch (error) {
       return callback(error)
     }
@@ -81,6 +81,7 @@ function stylelintGlobWrapper (options = {}) {
 
 function stylelintVinylWrapper (options = {}) {
   const stylelint = require('stylelint/lib/standalone')
+  const formatter = require('stylelint/lib/formatters/stringFormatter')
 
   let results = []
 
@@ -93,7 +94,7 @@ function stylelintVinylWrapper (options = {}) {
     const contents = file.contents.toString('utf8')
 
     try {
-      result = await stylelint({ ...options, files: null, code: contents, codeFilename: file.path })
+      result = await stylelint({ ...options.stylelint, files: null, code: contents, codeFilename: file.path })
     } catch (error) {
       return callback(error)
     }
@@ -101,7 +102,7 @@ function stylelintVinylWrapper (options = {}) {
     if (result.errored) {
       results = [...results, ...result.results]
     } else {
-      if (options.fix && result.output && result.output !== contents) {
+      if (options.stylelint.fix && result.output && result.output !== contents) {
         file.contents = Buffer.from(result.output)
         return callback(null, file)
       }
@@ -111,14 +112,17 @@ function stylelintVinylWrapper (options = {}) {
   }
 
   function flush (callback) {
-    const formatter = require('stylelint/lib/formatters/stringFormatter')
     const output = outputFormatter(formatter(results))
 
     if (output && options.failAfterError) {
       return callback(new Error(output))
     }
 
-    console.log(output)
+    if (output) {
+      console.log(output)
+    }
+
+    return callback()
   }
 
   return new Transform({ transform, flush, readableObjectMode: true, writableObjectMode: true })

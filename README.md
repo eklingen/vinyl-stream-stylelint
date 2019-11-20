@@ -61,8 +61,10 @@ When you pass a `files` glob, any files in the stream are ignored (you can set y
 
 ```
 stylelintWrapper({
-  files: 'src/scripts/**/*.js',
-  fix: true
+  stylelint: {
+    files: 'src/scripts/**/*.js',
+    fix: true
+  }
 })
 ```
 
@@ -74,7 +76,9 @@ When you pass files through the stream (don't pass a `files` options), it will t
 
 ```
 stylelintWrapper({
-  fix: true
+  stylelint: {
+    fix: true
+  }
 })
 ```
 
