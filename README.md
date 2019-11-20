@@ -20,11 +20,36 @@ This package assumes a configuration dotfile where stylelint can find it.
 
 ## Options
 
-See the ["stylelint"](https://www.npmjs.com/packages/stylelint) documentation for options. Beyond that, you have the following options:
+You have the following options:
 
 ### `failAfterError`
 
 This will determine wether to fail or not. Useful in a pre-commit hook, for example.
+
+```
+stylelintWrapper({
+  failAfterError: true
+})
+```
+
+### `stylelint`
+
+These options are passed verbatim to Stylelint. See the ["stylelint"](https://www.npmjs.com/packages/stylelint) documentation for more details.
+
+```
+stylelintWrapper({
+  stylelint: {
+    config: {},
+    configBaseDir: process.cwd(),
+    cache: true,
+    cacheLocation: join(process.cwd(), 'node_modules/.cache/stylelint/'),
+    fix: false,
+    syntax: 'scss',
+    formatter: 'string',
+    files: null
+  }
+})
+```
 
 ## Fast method vs Slow method
 

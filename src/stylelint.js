@@ -11,17 +11,21 @@
 //   Files with fixes (if any) are pushed back into the stream.
 //   Use this if you need more control, or need to do extra pre- or post- processing of files.
 
+const { join } = require('path')
 const { Transform } = require('stream')
 
 const DEFAULT_OPTIONS = {
-  config: {},
-  configBaseDir: process.cwd(),
-  cache: true,
-  fix: false,
-  syntax: 'scss',
   failAfterError: false,
-  formatter: 'string',
-  files: null
+  stylelint: {
+    config: {},
+    configBaseDir: process.cwd(),
+    cache: true,
+    cacheLocation: join(process.cwd(), 'node_modules/.cache/stylelint/'),
+    fix: false,
+    syntax: 'scss',
+    formatter: 'string',
+    files: null
+  }
 }
 
 function outputFormatter (output = '') {
@@ -31,6 +35,7 @@ function outputFormatter (output = '') {
 
 function stylelintWrapper (options = {}) {
   options = { ...DEFAULT_OPTIONS, ...options }
+  options.stylelint = { ...DEFAULT_OPTIONS.stylelint, ...options.stylelint }
 
   if (options.files) {
     return stylelintGlobWrapper(options)
