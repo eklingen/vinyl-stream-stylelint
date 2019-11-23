@@ -1,6 +1,7 @@
 
 # Changelog
 
+v2.1.3 - Internal refactoring
 v2.1.2 - Small bugfixes
 v2.1.1 - Prettier output
 v2.1.0 - Moved stylelint options to `options.stylelint`
