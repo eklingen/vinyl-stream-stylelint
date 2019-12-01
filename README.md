@@ -11,7 +11,7 @@ Run stylelint within your streams. Supports automatic fixing of files. Also has 
 
 ## Usage
 
-```
+```javascript
 const stylelintWrapper = require('@eklingen/vinyl-stream-stylelint')
 stream.pipe(stylelintWrapper())
 ```
@@ -26,7 +26,7 @@ You have the following options:
 
 This will determine wether to fail or not. Useful in a pre-commit hook, for example.
 
-```
+```javascript
 stylelintWrapper({
   failAfterError: true
 })
@@ -36,7 +36,7 @@ stylelintWrapper({
 
 These options are passed verbatim to Stylelint. See the ["stylelint"](https://www.npmjs.com/packages/stylelint) documentation for more details.
 
-```
+```javascript
 stylelintWrapper({
   stylelint: {
     config: {},
@@ -59,7 +59,7 @@ This plugin offers two different methods of running stylelint.
 
 When you pass a `files` glob, any files in the stream are ignored (you can set your stream src to `read: false`). You can set `fix: true` to have stylelint apply fixes directly to the source files on disk. This is mainly useful to simply lint everything and output the results.
 
-```
+```javascript
 stylelintWrapper({
   stylelint: {
     files: 'src/scripts/**/*.js',
@@ -74,7 +74,7 @@ stylelintWrapper({
 
 When you pass files through the stream (don't pass a `files` options), it will then remove those files from the stream. If you set `fix: true` any fixes are applied, and these fixed files are pushed back into the stream. This is mainly useful to lint individual files, like in a watch callback.
 
-```
+```javascript
 stylelintWrapper({
   stylelint: {
     fix: true
