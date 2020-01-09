@@ -29,11 +29,11 @@
     "test": "echo '** TODO: Write tests! **'; echo 'Linting...'; eslint index.js --fix;"
   },
   "dependencies": {
-    "stylelint": "^12.0.0"
+    "stylelint": "^12.0.1"
   },
   "devDependencies": {
-    "eslint": "^6.7.1",
-    "eslint-plugin-node": "^10.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-simple-import-sort": "^5.0.0",
     "eslint-plugin-smells": "^1.0.1"
