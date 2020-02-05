@@ -1,6 +1,8 @@
 
 # Changelog
 
+v2.2.2 - Upgrade dependencies
+v2.2.1 - Upgrade dependencies
 v2.2.0 - First release with a tag
 v2.1.3 - Internal refactoring
 v2.1.2 - Small bugfixes
