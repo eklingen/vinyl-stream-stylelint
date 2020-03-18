@@ -1,6 +1,7 @@
 
 # Changelog
 
+v2.2.3 - Updated development node version to 12.16.0
 v2.2.2 - Upgrade dependencies
 v2.2.1 - Upgrade dependencies
 v2.2.0 - First release with a tag
