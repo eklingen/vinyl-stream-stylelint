@@ -1,6 +1,6 @@
 {
   "name": "@eklingen/vinyl-stream-stylelint",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "Small vinyl-stream wrapper -aka Gulp plugin- for stylelint.",
   "repository": {
     "type": "git",
