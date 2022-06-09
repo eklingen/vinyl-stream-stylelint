@@ -1,6 +1,7 @@
 
 # Changelog
 
+v3.0.2 - Removed "syntax" option in default settings
 v3.0.2 - Upgrade dependencies
 v3.0.1 - Upgrade dependencies
 v3.0.0 - Upgrade node to v14 LTS

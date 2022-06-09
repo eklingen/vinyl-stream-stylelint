@@ -24,7 +24,6 @@ const DEFAULT_OPTIONS = {
     cache: true,
     cacheLocation: join(process.cwd(), 'node_modules/.cache/stylelint/'),
     fix: false,
-    syntax: 'scss',
     formatter: 'string',
     files: null
   }
