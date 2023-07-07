@@ -29,7 +29,7 @@
     "test": "echo '** TODO: Write tests! **'; echo 'Linting...'; eslint index.js --fix;"
   },
   "dependencies": {
-    "stylelint": "^14.9.0"
+    "stylelint": "^15.10.1"
   },
   "devDependencies": {
     "eslint": "^8.17.0",
