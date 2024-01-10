@@ -25,16 +25,16 @@ const DEFAULT_OPTIONS = {
     cacheLocation: join(process.cwd(), 'node_modules/.cache/stylelint/'),
     fix: false,
     formatter: 'string',
-    files: null
-  }
+    files: null,
+  },
 }
 
-function outputFormatter (output = '') {
+function outputFormatter(output = '') {
   output = output.toString().trim()
   return output ? `\n${output.replace('\n\n\n', '\n\n')}\n` : ''
 }
 
-function stylelintWrapper (options = {}) {
+function stylelintWrapper(options = {}) {
   options = { ...DEFAULT_OPTIONS, ...options }
   options.stylelint = { ...DEFAULT_OPTIONS.stylelint, ...options.stylelint }
 
@@ -45,14 +45,14 @@ function stylelintWrapper (options = {}) {
   return stylelintVinylWrapper(options)
 }
 
-function stylelintGlobWrapper (options = {}) {
+function stylelintGlobWrapper(options = {}) {
   const stylelint = require('stylelint')
 
-  function transform (file, encoding, callback) {
+  function transform(file, encoding, callback) {
     return callback(null, file) // Any files in the stream are ignored
   }
 
-  async function flush (callback) {
+  async function flush(callback) {
     let result
 
     try {
@@ -78,16 +78,16 @@ function stylelintGlobWrapper (options = {}) {
     transform,
     flush,
     readableObjectMode: true,
-    writableObjectMode: true
+    writableObjectMode: true,
   })
 }
 
-function stylelintVinylWrapper (options = {}) {
+function stylelintVinylWrapper(options = {}) {
   const stylelint = require('stylelint')
 
   const reports = []
 
-  async function transform (file, encoding, callback) {
+  async function transform(file, encoding, callback) {
     if (!file.isBuffer() || !file.contents || !file.contents.length) {
       return
     }
@@ -100,7 +100,7 @@ function stylelintVinylWrapper (options = {}) {
         ...options.stylelint,
         files: null,
         code: contents,
-        codeFilename: file.path
+        codeFilename: file.path,
       })
     } catch (error) {
       return callback(error)
@@ -118,7 +118,7 @@ function stylelintVinylWrapper (options = {}) {
     return callback()
   }
 
-  async function flush (callback) {
+  async function flush(callback) {
     const report = reports.join('\n')
 
     if (report && options.failAfterError) {
@@ -136,7 +136,7 @@ function stylelintVinylWrapper (options = {}) {
     transform,
     flush,
     readableObjectMode: true,
-    writableObjectMode: true
+    writableObjectMode: true,
   })
 }
 

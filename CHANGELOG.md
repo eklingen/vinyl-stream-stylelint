@@ -1,6 +1,7 @@
 
 # Changelog
 
+v5.0.1 - DevEnv changes
 v5.0.0 - Updated stylelint from v15 to v16
 v4.0.0 - Updated stylelint from v14 to v15
 v3.0.4 - Unpinned stylelint
