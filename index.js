@@ -46,8 +46,7 @@ function stylelintWrapper (options = {}) {
 }
 
 function stylelintGlobWrapper (options = {}) {
-  const stylelint = require('stylelint/lib/standalone')
-  const formatter = require('stylelint/lib/formatters/stringFormatter')
+  const stylelint = require('stylelint')
 
   function transform (file, encoding, callback) {
     return callback(null, file) // Any files in the stream are ignored
@@ -57,32 +56,36 @@ function stylelintGlobWrapper (options = {}) {
     let result
 
     try {
-      result = await stylelint({ ...options.stylelint })
+      result = await stylelint.lint({ ...options.stylelint })
     } catch (error) {
       return callback(error)
     }
 
-    const output = outputFormatter(formatter(result.results))
+    const report = outputFormatter(result.report)
 
     if (result.errored && options.failAfterError) {
-      return callback(new Error(output))
+      return callback(new Error(report))
     }
 
-    if (output) {
-      console.log(output)
+    if (report) {
+      console.log(report)
     }
 
     return callback()
   }
 
-  return new Transform({ transform, flush, readableObjectMode: true, writableObjectMode: true })
+  return new Transform({
+    transform,
+    flush,
+    readableObjectMode: true,
+    writableObjectMode: true
+  })
 }
 
 function stylelintVinylWrapper (options = {}) {
-  const stylelint = require('stylelint/lib/standalone')
-  const formatter = require('stylelint/lib/formatters/stringFormatter')
+  const stylelint = require('stylelint')
 
-  let results = []
+  const reports = []
 
   async function transform (file, encoding, callback) {
     if (!file.isBuffer() || !file.contents || !file.contents.length) {
@@ -93,16 +96,21 @@ function stylelintVinylWrapper (options = {}) {
     const contents = file.contents.toString('utf8')
 
     try {
-      result = await stylelint({ ...options.stylelint, files: null, code: contents, codeFilename: file.path })
+      result = await stylelint.lint({
+        ...options.stylelint,
+        files: null,
+        code: contents,
+        codeFilename: file.path
+      })
     } catch (error) {
       return callback(error)
     }
 
     if (result.errored) {
-      results = [...results, ...result.results]
+      reports.push(result.report)
     } else {
-      if (options.stylelint.fix && result.output && result.output !== contents) {
-        file.contents = Buffer.from(result.output)
+      if (options.stylelint.fix && result.code && result.code !== contents) {
+        file.contents = Buffer.from(result.code)
         return callback(null, file)
       }
     }
@@ -110,21 +118,26 @@ function stylelintVinylWrapper (options = {}) {
     return callback()
   }
 
-  function flush (callback) {
-    const output = outputFormatter(formatter(results))
+  async function flush (callback) {
+    const report = reports.join('\n')
 
-    if (output && options.failAfterError) {
-      return callback(new Error(output))
+    if (report && options.failAfterError) {
+      return callback(new Error(report))
     }
 
-    if (output) {
-      console.log(output)
+    if (report) {
+      console.log(report)
     }
 
     return callback()
   }
 
-  return new Transform({ transform, flush, readableObjectMode: true, writableObjectMode: true })
+  return new Transform({
+    transform,
+    flush,
+    readableObjectMode: true,
+    writableObjectMode: true
+  })
 }
 
 module.exports = stylelintWrapper
